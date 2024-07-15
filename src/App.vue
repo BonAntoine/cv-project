@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import Badge from './components/Badge.vue'
 </script>
 
 <template>
-
-
-
 
     <body class="flex justify-center content-center">
         <!-- outer container -->
@@ -86,33 +84,54 @@
                                 Annoeullin</span></li>
                     </ul>
 
+                    <section>
+                        <h2 class="text-2xl mt-6 pb-1 font-semibold">Formations</h2>
+                        <p class="mt-4">
+                        <ul>
+                            <li>Svelte - Mai 2024</li>
+                            <li>Vue - Janvier 2024</li>
+                            <li>Sécurité web m2i - Mars 2024</li>
+                            <li>Industrialisation et automatisation des tests - Mai 2022</li>
+                        </ul>
+                        </p>
+
+                    </section>
+
+                    <div class="mt-10"></div>
+
                     <!-- skills -->
-                    <strong class="text-xl font-medium">Skills</strong>
+                    <strong class="text-xl font-medium">Compétences</strong>
                     <ul class="mt-2 flex">
 
-                        <li class="px-2 mt-1">Vue</li>
-                        <li class="px-2 mt-1">React</li>
-                        <li class="px-2 mt-1">Angular</li>
-                        <li class="px-2 mt-1">Svelte</li>
+                        <Badge msg="Vue"></Badge>
+                        <Badge msg="React"></Badge>
+                        <Badge msg="Angular"></Badge>
+                        <Badge msg="Svelte"></Badge>
                     </ul>
                     <div class="border-b w-6 ml-28 my-2"></div>
                     <ul class="flex mt-2">
-                        <li class="px-2 mt-1">NestJS</li>
-                        <li class="px-2 mt-1">Node.js</li>
-                        <li class="px-2 mt-1">Go</li>
+                        <Badge msg="NestJS"></Badge>
+                        <Badge msg="Node.js"></Badge>
+                        <Badge msg="Go"></Badge>
                     </ul>
                     <div class="border-b w-6 ml-28 my-2"></div>
                     <ul class="mt-2 flex">
-                        <li class="px-2 mt-1">Typescript</li>
-                        <li class="px-2 mt-1">Javascript</li>
-                        <li class="px-2 mt-1">HTML</li>
-                        <li class="px-2 mt-1">CSS</li>
+                        <Badge msg="Typescript"></Badge>
+                        <Badge msg="Javascript"></Badge>
+                        <Badge msg="HTML"></Badge>
+                        <Badge msg="CSS"></Badge>
+                    </ul>
+                    <div class="border-b w-6 ml-28 my-2"></div>
+                    <ul class="mt-2 flex">
+                        <Badge msg="Cypress"></Badge>
+                        <Badge msg="Jest"></Badge>
+                        <Badge msg="Puppeteer"></Badge>
                     </ul>
                     <div class="border-b w-6 ml-28 my-2"></div>
                     <ul class="mt-2 mb-10 flex">
-                        <li class="px-2 mt-1">ESLint</li>
-                        <li class="px-2 mt-1">Prettier</li>
-                        <li class="px-2 mt-1">Tailwind</li>
+                        <Badge msg="ESLint"></Badge>
+                        <Badge msg="Prettier"></Badge>
+                        <Badge msg="Tailwind"></Badge>
                     </ul>
                     <strong class="text-xl font-medium">Centres d'intérêt</strong>
                     <ul class="mt-2">
@@ -127,7 +146,7 @@
                 <div class="w-5/6">
 
                     <!-- work experiences -->
-                    <h2 class="text-2xl mt-6 pb-1 border-b font-semibold">Expériences professionnelles</h2>
+                    <h2 class="text-2xl pb-1 border-b font-semibold">Expériences professionnelles</h2>
 
 
                     <section>
@@ -135,19 +154,19 @@
                         <ul class="">
                             <li class="">
                                 <div>
-                                    <p class="text-slate-400">Atos</p>
+                                    <p class="text-slate-400">Eviden</p>
                                 </div>
                                 <p class="flex justify-between text-sm"><strong class="text-base">Renault</strong></p>
 
                                 <!--TCR - connect-->
-                                <p class="flex justify-between text-base my-2">
-                                    Développeur Full Stack techlead Back
-                                <p>Avr. 2024 - Jui. 2024</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Développeur Full Stack techlead Back</p>
+                                    <p>Avr. 2024 - Jui. 2024</p>
+                                </div>
                                 <p class="text-justify text-xs">
                                     Application ce centralisation de KPI pour les usines de production, avec pour
                                     objectif final d'être présenté sur écrans géants et piloté à distance.
-                                <ul class="list-disc mt-2">
+                                <ul class="list-disc mt-2 text-xs text-justify">
                                     <li>Développeur full stack avec NestJS</li>
                                     <li>Tests unitaire (white box)</li>
                                     <li>Utilisation de l'API Looker de Google</li>
@@ -161,14 +180,15 @@
                                 <p class="flex justify-between text-sm pt-2"><strong class="text-base">Sanofi</strong>
                                 </p>
 
-                                <p class="flex justify-between text-base my-2">Développeur Full Stack
-                                <p>Fev. 2024 - Mai. 2024</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Développeur Full Stack</p>
+                                    <p>Fev. 2024 - Mai. 2024</p>
+                                </div>
                                 <p class="text-justify text-xs">Centralisateur et comparateur de KPI pour les
                                     différentes
                                     usines avec gestion d'éléments de conseils de performance.
 
-                                <ul class="list-disc mt-2">
+                                <ul class="list-disc mt-2 text-xs text-justify">
                                     <li>Développeur full stack avec NestJS</li>
                                     <li>Tests unitaires et e2e</li>
                                     <li>Querying SQL avec TypeORM pour la partie BDD</li>
@@ -182,13 +202,14 @@
                                 <p class="flex justify-between text-sm pt-2"><strong class="text-base">Renault</strong>
                                 </p>
 
-                                <p class="flex justify-between text-base my-2">Développeur Front-end & Architect
-                                <p>Nov. 2022 - Fev. 2024</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Développeur Front-end & Architect</p>
+                                    <p>Nov. 2022 - Fev. 2024</p>
+                                </div>
                                 <p class="text-justify text-xs">Outil de gestion interne à l'entreprise client, avec un
                                     modèle de données à remanier et de multiples contraintes.
 
-                                <ul class="list-disc mt-2">
+                                <ul class="list-disc mt-2 text-xs text-justify">
                                     <li>Développement de formulaires complexes avec sauvegarde automatique</li>
                                     <li>Travail dans une équipe à travers l'internationale</li>
                                     <li>Force de proposition auprès des UX/UI, DBA, Backend et testeur</li>
@@ -208,18 +229,19 @@
                                 <!-- Advise -->
                                 <h2 class="text-2xl mt-6 pb-1 border-b font-semibold"></h2>
                                 <div>
-                                    <p class="text-slate-400">Eviden</p>
+                                    <p class="text-slate-400">Atos</p>
                                 </div>
 
                                 <p class="flex justify-between text-sm pt-2"><strong class="text-base">SNCF</strong></p>
-                                <p class="flex justify-between text-base my-2">Développeur Full Stack - GCP & 3D
-                                <p>Oct. 2021 - Jui. 2022</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Développeur Full Stack - GCP & 3D</p>
+                                    <p>Oct. 2021 - Jui. 2022</p>
+                                </div>
                                 <p class="text-justify text-xs">Création d'un site web d'édition et d'édition et de
                                     visualisation de contenu immersif 3D en interche d'abord chez Atos, et pour des
                                     clients finaux comme la SNCF, ou musées et magasins.
 
-                                <ul class="list-disc my-2">
+                                <ul class="list-disc my-2 text-xs text-justify">
                                     <li>Développement d'une architecture dite futur-proof</li>
                                     <li>Optimisation et conception de scène 3D dans un site web avec BabylonJS</li>
                                     <li>Support multi utilisateur et partage d'expérience immersive</li>
@@ -231,9 +253,10 @@
 
                                 <p class="flex justify-between text-sm pt-2"><strong class="text-base">Ugap</strong></p>
 
-                                <p class="flex justify-between text-base my-2">Consultant technique
-                                <p>Fev. 2021 - Oct. 2021</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Consultant technique</p>
+                                    <p>Fev. 2021 - Oct. 2021</p>
+                                </div>
                                 <p class="text-justify text-xs">Développement d'un site web contenant multiple
                                     formulaire et gestion de droit pour un acteur du secteur public
                                 </p>
@@ -241,14 +264,15 @@
                                 <!-- Koela -->
                                 <h2 class="text-2xl mt-6 pb-1 border-b font-semibold"></h2>
 
-                                <p class="flex justify-between text-base my-2">Développeur Full Stack
-                                <p>Avr. 2019 - Fev. 2021</p>
-                                </p>
+                                <div class="flex justify-between text-base my-2">
+                                    <p>Développeur Full Stack</p>
+                                    <p>Avr. 2019 - Fev. 2021</p>
+                                </div>
                                 <p class="text-justify text-xs">Développement d'un outil interne de gestion interne
                                     d'emploi du
                                     temps et de coût.
 
-                                <ul class="list-disc my-2">
+                                <ul class="list-disc my-2 text-xs text-justify">
                                     <li>Architecture from scratch</li>
                                     <li>Participation méthode Scrum (gestion des tâche et formation nouveaux arrivants)
                                     </li>
@@ -343,19 +367,6 @@
                         </ul>
                     </section> -->
 
-                    <section>
-                        <h2 class="text-2xl mt-6 pb-1 border-b font-semibold">Formations</h2>
-                        <p class="mt-4 text-xs">
-                        <ul>
-                            <li>Svelte - Mai 2024</li>
-                            <li>Vue - Janvier 2024</li>
-                            <li>Sécurité web m2i - Mars 2024</li>
-                            <li>Industrialisation et automatisation des tests - Mai 2022</li>
-                        </ul>
-                        </p>
-
-                    </section>
-
 
                     <section>
                         <!-- education -->
@@ -384,9 +395,14 @@
                                 <p class="flex justify-between text-sm">
                                     <strong class="text-base">Bac S spé ISN</strong>2022-2019
                                 </p>
-                                <p class="flex text-sm">
-                                <p class="mr-2">Projet</p><a
-                                    href="http://debonmatin.free.fr/monpremierjeu/Ex1.html">Warcross</a></p>
+                                <div>
+                                    <p class="text-justify">Projet
+                                        <a class="text-justify"
+                                            href="http://debonmatin.free.fr/monpremierjeu/Ex1.html">Warcross</a>
+                                    </p>
+                                </div>
+
+
                             </li>
                         </ul>
                     </section>
