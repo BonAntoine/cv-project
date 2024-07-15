@@ -133,7 +133,52 @@ import Badge from './components/Badge.vue'
                         <Badge msg="Prettier"></Badge>
                         <Badge msg="Tailwind"></Badge>
                     </ul>
-                    <strong class="text-xl font-medium">Centres d'intérêt</strong>
+
+
+                    <section>
+                        <!-- education -->
+                        <h2 class="text-2xl mt-6 pb-1 border-b font-semibold">Parcours scolaire</h2>
+                        <ul class="mt-2">
+                            <li class="pt-2">
+                                <p class="flex justify-between text-sm">
+                                    <strong class="text-base">Master E-Services</strong>2022-2019
+                                </p>
+                                <p class="flex justify-between text-sm">Campus de Lille 1, alternance Atos</p>
+                            </li>
+                            <li class="pt-2">
+                                <p class="flex justify-between text-sm">
+                                    <strong class="text-base">Licence 3 informatique</strong>2022-2019
+                                </p>
+                                <p class="flex justify-between text-sm">Stage Atos</p>
+                            </li>
+                            <li class="pt-2">
+                                <p class="flex justify-between text-sm">
+                                    <strong class="text-base">DUT IUT A Lille 1</strong>2022-2019
+                                </p>
+                                <p class="flex justify-between text-sm">Stage à l'étranger à Glasgow
+                                </p>
+                                <p class="flex justify-between text-sm">Projet Drawinguess
+                                </p>
+                            </li>
+                            <li class="pt-2">
+                                <p class="flex justify-between text-sm">
+                                    <strong class="text-base">Bac S spé ISN</strong>2022-2019
+                                </p>
+                                <div>
+                                    <p class="text-justify">Projet
+                                        <a class="text-justify"
+                                            href="http://debonmatin.free.fr/monpremierjeu/Ex1.html">Warcross</a>
+                                    </p>
+                                </div>
+
+
+                            </li>
+                        </ul>
+                    </section>
+
+
+
+                    <div class="mt-10"><strong class="text-xl font-medium">Centres d'intérêt</strong></div>
                     <ul class="mt-2">
                         <li class="px-2 mt-1">Course sur route et trail, marathon</li>
                         <li class="px-2 mt-1">Randonnées, trek</li>
@@ -368,44 +413,7 @@ import Badge from './components/Badge.vue'
                     </section> -->
 
 
-                    <section>
-                        <!-- education -->
-                        <h2 class="text-2xl mt-6 pb-1 border-b font-semibold">Parcours scolaire</h2>
-                        <ul class="mt-2">
-                            <li class="pt-2">
-                                <p class="flex justify-between text-sm">
-                                    <strong class="text-base">Master E-Services</strong>2022-2019
-                                </p>
-                                <p class="flex justify-between text-sm">Campus de Lille 1, alternance Atos</p>
-                            </li>
-                            <li class="pt-2">
-                                <p class="flex justify-between text-sm">
-                                    <strong class="text-base">Licence 3 informatique</strong>2022-2019
-                                </p>
-                                <p class="flex justify-between text-sm">Stage Atos</p>
-                            </li>
-                            <li class="pt-2">
-                                <p class="flex justify-between text-sm">
-                                    <strong class="text-base">DUT IUT A Lille 1</strong>2022-2019
-                                </p>
-                                <p class="flex justify-between text-sm">Stage à l'étranger à Glasgow, projet Drawinguess
-                                </p>
-                            </li>
-                            <li class="pt-2">
-                                <p class="flex justify-between text-sm">
-                                    <strong class="text-base">Bac S spé ISN</strong>2022-2019
-                                </p>
-                                <div>
-                                    <p class="text-justify">Projet
-                                        <a class="text-justify"
-                                            href="http://debonmatin.free.fr/monpremierjeu/Ex1.html">Warcross</a>
-                                    </p>
-                                </div>
-
-
-                            </li>
-                        </ul>
-                    </section>
+                    
                 </div>
             </main>
             <!-- short lines to introduce myself
