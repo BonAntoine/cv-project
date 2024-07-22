@@ -4,13 +4,83 @@ import Badge from './components/Badge.vue'
 import ProSection from './components/ProSection.vue';
 import githubSrc from './assets/github.svg';
 import linkedinSrc from './assets/linkedin.svg';
+import { TresCanvas } from '@tresjs/core';
+import { onBeforeUnmount, onMounted, ref } from "vue"
+
+import { useTexture } from '@tresjs/core'
+
+
+// import { useLoader } from '@tresjs/core'
+// import { TextureLoader } from 'three'
+// const height = useLoader(TextureLoader, 'cv-project/height.png')
+
+let meshPosition = ref([5, 3, -5])
+
+let scrollMaxY = 0;
+
+
+function logScroll() {
+    calculateScrollMaxY();
+    console.log(window.scrollY, scrollMaxY)
+    meshPosition.value = [getLinear(), 0, -5]
+}
+
+function calculateScrollMaxY() {
+    scrollMaxY = document.documentElement.scrollHeight - window.innerHeight;
+}
+
+function getLinear() {
+    return (window.scrollY / scrollMaxY) * 5;
+}
+
+function randomTerrain() {
+    // Random values for terrain vertices
+    const randomVals = [];
+
+    for (let i = 0; i < 12675; i++) {
+        randomVals.push(Math.random() - 0.5);
+    }
+
+    return randomVals;
+}
+
+onMounted(() => {
+    let height = useTexture(['cv-project/height.png'])
+    window.addEventListener('scroll', logScroll)
+    window.addEventListener('resize', calculateScrollMaxY);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', logScroll)
+    window.removeEventListener('resize', calculateScrollMaxY);
+})
+
 </script>
 
 <template>
 
     <body class="flex justify-center content-center">
-        <!-- outer container aspect-[210/297] -->
-        <div class="border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10">
+
+        <!-- 3D Canvas-->
+
+        <TresCanvas clear-color="#FFFFFF" window-size>
+
+            <TresPerspectiveCamera :position="[0, 0, 0]" :look-at="[0, 0, 0]" />
+            <TresMesh :position="meshPosition">
+                <TresBoxGeometry :args="[1, 1, 1]" />
+                <TresMeshBasicMaterial color="orange" />
+            </TresMesh>
+            <TresMesh :position="[0, 0, -200]">
+                <TresPlaneGeometry :args="[150, 150, 64, 64]" />
+                <TresMeshStandardMaterial displacementMap="height" color="green" flatShading="true" displacementScale="5" />
+            </TresMesh>
+            <TresAmbientLight :intensity="1" />
+        </TresCanvas>
+
+
+        <!-- HTML outer container aspect-[210/297] -->
+        <div
+            class="z-10 bg-opacity-85 bg-white border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10">
             <!-- header (profile) -->
             <header>
                 <!-- social icons-->
@@ -190,9 +260,5 @@ import linkedinSrc from './assets/linkedin.svg';
             </main>
         </div>
     </body>
-
-
-
-
 
 </template>
