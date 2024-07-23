@@ -4,13 +4,118 @@ import Badge from './components/Badge.vue'
 import ProSection from './components/ProSection.vue';
 import githubSrc from './assets/github.svg';
 import linkedinSrc from './assets/linkedin.svg';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import * as THREE from 'three';
+import { createTerrain, createLight } from './utils/utils.three';
+
+
+// SCENE DEFINITION
+
+const target = ref();
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xFFFFFF);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+
+camera.position.set(0, 0, 5);
+cube.position.set(0, 0, 0);
+
+
+const randomVals: number[] = [];
+
+for (let i = 0; i < 12675; i++) {
+    randomVals.push(Math.random() - 0.5);
+}
+
+let terrain = createTerrain({
+    color: 'green',
+});
+
+let { light, lightHelper } = createLight('white')
+
+scene.fog = new THREE.Fog('white', 30, 90);
+
+scene.add(cube, terrain, light);
+
+function animate() {
+    const currentFrame = requestAnimationFrame(animate);
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    cube.position.set(getLinear(), 0, 0);
+
+    const { array } =  terrain.geometry.attributes.position;
+
+    for (let i = 0; i < array.length; i += 3) {
+     // Accessing the z coord
+     // Try switching these numbers up, or using sine instead of cosine, see how the animation changes.
+     array[i + 2] = array[i + 2] + Math.sin(currentFrame/100 + randomVals[i + 2]) * 0.009;
+   }
+   terrain.geometry.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
+}
+
+onMounted(() => {
+    target.value.appendChild(renderer.domElement);
+    animate();
+
+    window.addEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onResize);
+})
+
+
+// UTILS 
+
+let scrollMaxY = 0;
+
+
+function onScroll() {
+    calculateScrollMaxY();
+    console.log(window.scrollY, scrollMaxY)
+}
+
+function onResize() {
+    resetRendererSize()
+}
+
+function resetRendererSize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+}
+
+function calculateScrollMaxY() {
+    scrollMaxY = document.documentElement.scrollHeight - window.innerHeight;
+}
+function getLinear() {
+    if (scrollMaxY === 0) return 0;
+    return (window.scrollY / scrollMaxY) * 5;
+}
+
 </script>
 
 <template>
 
-    <body class="flex justify-center content-center">
+    <div ref="target" class="fixed"></div>
+
+    <body class="flex justify-center content-center text-slate-900 text-center">
         <!-- outer container aspect-[210/297] -->
-        <div class="border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10">
+        <div
+            class="z-10 bg-opacity-85 bg-white border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10 max-w-5xl">
             <!-- header (profile) -->
             <header>
                 <!-- social icons-->
