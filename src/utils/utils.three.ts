@@ -5,7 +5,12 @@ import {
     TextureLoader,
     DirectionalLight,
     DirectionalLightHelper,
+    Scene,
+    Object3DEventMap,
+    Group,
+    Object3D
 } from "three";
+import { FBXLoader } from 'three/examples/jsm/Addons.js';
 
 function createTerrain(props: any) {
     const loader = new TextureLoader();
@@ -37,4 +42,39 @@ function createLight(color: string) {
     return { light, lightHelper };
 }
 
-export { createTerrain, createLight };
+const loader = new FBXLoader();
+
+async function importFbx(modelName: string): Promise<Group<Object3DEventMap>> {
+    
+
+    return loader.loadAsync('cv-project/ressources/models/' + modelName)
+}
+
+function setModelProperty(model: Group<Object3DEventMap>, modelName: string, group: Group) {
+    model.name = modelName;
+    model.position.set(-100, -100, -100)
+    model.scale.set(0.01, 0.01, 0.01)
+    group.add(model)
+}
+
+function setModelsInGrid(models: Array<Object3D | undefined>, objectPerLine: number) {
+    let lineCount = 0;
+    models.forEach((model, index) => {
+        if (model) {
+            if(index % objectPerLine === 0) {
+                lineCount += 1;
+            }
+            model.position.set((index - lineCount) * 0.2, - (lineCount * 0.2), 3)
+        }
+    })
+}
+
+function getOutModels(models: Array<Object3D | undefined>) {
+    models.forEach((model, index) => {
+        if (model) {
+            model.position.set(-100, -100, -100)
+        }
+    })
+}
+
+export { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels };

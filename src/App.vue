@@ -22,20 +22,25 @@ const currentView = computed(() => {
 })
 
 const overed = ref('')
+const step = ref('')
 
 function setOvered(overedValue: string) {
     overed.value = overedValue;
+}
+
+function setStep(value: string) {
+    step.value = value;
 }
 
 </script>
 
 <template>
 
-    <ThreeBackground :overed="overed"></ThreeBackground>
+    <ThreeBackground :overed="overed" :step="step"></ThreeBackground>
 
     <a href="#/single-page-cv" class="fixed">CV</a>
 
-    <component :is="currentView" @over="setOvered"/>
+    <component :is="currentView" @over="setOvered" @scroll="setStep"/>
 
 
 

@@ -1,17 +1,23 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import * as THREE from 'three';
-import { createTerrain, createLight } from '../utils/utils.three';
+import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels } from '../utils/utils.three';
 import { useScroll } from '../hooks/useScroll';
-import { FBXLoader } from 'three/examples/jsm/Addons.js';
+import { logoFileList, Steps } from '../utils/constant';
+import { useMouse } from '../hooks/useMouse';
 
-const props = defineProps(['overed'])
 
+const props = defineProps(['overed', 'step']);
+let needUpdate = false;
+watch(() => props.step, () => {
+    needUpdate = true;
+});
 const { scrollMaxY } = useScroll();
+const { x, y, normX, normY } = useMouse()
 
 // SCENE DEFINITION
 
-const target = ref();
+const target = ref<HTMLElement | null>(null);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xFFFFFF);
@@ -46,22 +52,25 @@ scene.fog = new THREE.Fog('white', 30, 90);
 
 // 3D Models loading
 
-const loader = new FBXLoader();
+const logoList: Array<THREE.Object3D | undefined> = []
+const logoGroup = new THREE.Group();
+scene.add(logoGroup);
 
-loader.load('cv-project/ressources/models/react-logo.fbx', function (fbxObj) {
+logoFileList.forEach((logoName: string) => {
 
-    fbxObj.name = 'react-logo';
-    fbxObj.position.set(0, 0, 0);
-    fbxObj.scale.set(0.001, 0.001, 0.001);
-    scene.add(fbxObj);
+    const nameWithoutExtension = logoName.slice(0, logoName.length-3);
 
-}, undefined, function (error) {
+    importFbx(logoName).then((model: any) => {
+        setModelProperty(model, nameWithoutExtension, logoGroup)
 
-    console.error(error);
+        logoList.push(scene.getObjectByName(nameWithoutExtension))
+    });
 
-});
+})
 
-scene.add(dev3Dmd, terrain, light);
+
+
+scene.add(terrain, light);
 
 function animate() {
 
@@ -72,15 +81,37 @@ function animate() {
 
     dev3Dmd.position.set(getLinear(), 0, 0);
 
-    const reactLogo = scene.getObjectByName('react-logo') as THREE.Mesh;
+    // Step has changed
+    if(needUpdate) {
+        getOutModels(logoList)
+        switch (props.step) {
+            case Steps.PROFIL:
+                
+                break;
+            case Steps.PROEXP:
+                setModelsInGrid(logoList, 3);
+                break;
+            case Steps.TRAINING:
+                
+                break;
+            case Steps.HOBBIES:
+                
+                break;
+            default:
+                break;
+        }
+        needUpdate = false;
+    }
 
-    if(reactLogo) {
+    // const reactLogo = scene.getObjectByName('react') as THREE.Mesh;
+
+    // if(reactLogo) {
 
         
-        var time = Date.now() * 0.001;  // Temps en secondes
-        reactLogo.rotation.y += (Math.sin(time) * 0.01) - 0.005;
-        reactLogo.position.y = Math.sin(time) * 0.08;  // Ajustez l'amplitude du mouvement ici
-    }
+    //     var time = Date.now() * 0.001;  // Temps en secondes
+    //     reactLogo.rotation.y += (Math.sin(time) * 0.01) - 0.005;
+    //     reactLogo.position.y = Math.sin(time) * 0.08;  // Ajustez l'amplitude du mouvement ici
+    // }
 
     // Background terrain animation
 
@@ -92,11 +123,17 @@ function animate() {
     }
     terrain.geometry.attributes.position.needsUpdate = true;
 
+    // Parallax effect, with smoothness with easing
+    const parallaxX = normX.value / 5;
+    const parallaxY = -normY.value / 5;
+    camera.position.x += (parallaxX - camera.position.x) * 0.15;
+    camera.position.y += (parallaxY - camera.position.y) * 0.15;
+
     renderer.render(scene, camera);
 }
 
 onMounted(() => {
-    target.value.appendChild(renderer.domElement);
+    target.value?.appendChild(renderer.domElement);
     animate();
     window.addEventListener('resize', onResize);
 });
