@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import * as THREE from 'three';
-import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels } from '../utils/utils.three';
+import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels } from '../utils/utils.three';
 import { useScroll } from '../hooks/useScroll';
 import { logoFileList, Steps } from '../utils/constant';
 import { useMouse } from '../hooks/useMouse';
@@ -90,6 +90,8 @@ function animate() {
                 break;
             case Steps.PROEXP:
                 setModelsInGrid(logoList, 3);
+                
+                logoGroup.position.set(-0.70, 0.70, 3);
                 break;
             case Steps.TRAINING:
                 
@@ -103,15 +105,7 @@ function animate() {
         needUpdate = false;
     }
 
-    // const reactLogo = scene.getObjectByName('react') as THREE.Mesh;
-
-    // if(reactLogo) {
-
-        
-    //     var time = Date.now() * 0.001;  // Temps en secondes
-    //     reactLogo.rotation.y += (Math.sin(time) * 0.01) - 0.005;
-    //     reactLogo.position.y = Math.sin(time) * 0.08;  // Ajustez l'amplitude du mouvement ici
-    // }
+    animateModels(logoList);
 
     // Background terrain animation
 

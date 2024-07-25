@@ -11,7 +11,6 @@ export function useMouse() {
   function update(event: any) {
     x.value = event.clientX
     y.value = event.clientY
-    console.log(event.clientX, window.innerWidth, event.clientY, window.innerHeight)
     normX.value = (event.clientX / window.innerWidth) - 0.5
     normY.value = (event.clientY / window.innerHeight) - 0.5
   }

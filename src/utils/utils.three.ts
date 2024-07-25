@@ -64,7 +64,7 @@ function setModelsInGrid(models: Array<Object3D | undefined>, objectPerLine: num
             if(index % objectPerLine === 0) {
                 lineCount += 1;
             }
-            model.position.set((index - lineCount) * 0.2, - (lineCount * 0.2), 3)
+            model.position.set((index - lineCount * objectPerLine) * 0.2, - (lineCount * 0.2), 0)
         }
     })
 }
@@ -77,4 +77,13 @@ function getOutModels(models: Array<Object3D | undefined>) {
     })
 }
 
-export { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels };
+function animateModels(models: Array<Object3D | undefined>) {
+    models.forEach((model, index) => {
+        if (model) {
+            const time = Date.now() * 0.001
+            model.rotation.y += (Math.sin(time) * 0.005);
+        }
+    })
+}
+
+export { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels };
