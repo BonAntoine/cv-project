@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
 import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels } from '../utils/utils.three';
 import { useScroll } from '../hooks/useScroll';
-import { logoFileList, Steps } from '../utils/constant';
+import { LogoFileInfo, logoFileList, Steps } from '../utils/constant';
 import { useMouse } from '../hooks/useMouse';
 
 
 const props = defineProps(['overed', 'step']);
-let needUpdate = false;
+let needUpdate = true;
 watch(() => props.step, () => {
     needUpdate = true;
 });
 const { scrollMaxY } = useScroll();
-const { x, y, normX, normY } = useMouse()
+const { normX, normY } = useMouse()
 
 // SCENE DEFINITION
 
@@ -45,9 +45,11 @@ let terrain = createTerrain({
     color: 'green',
 });
 
-let { light, lightHelper } = createLight('white')
+let { light } = createLight('white')
 
 scene.fog = new THREE.Fog('white', 30, 90);
+
+scene.background = new THREE.Color(0xcceafc);
 
 
 // 3D Models loading
@@ -56,14 +58,12 @@ const logoList: Array<THREE.Object3D | undefined> = []
 const logoGroup = new THREE.Group();
 scene.add(logoGroup);
 
-logoFileList.forEach((logoName: string) => {
+logoFileList.forEach((logoFileInfo: LogoFileInfo) => {
 
-    const nameWithoutExtension = logoName.slice(0, logoName.length-3);
+    importFbx(logoFileInfo.name).then((model: any) => {
+        setModelProperty(model, logoFileInfo, logoGroup)
 
-    importFbx(logoName).then((model: any) => {
-        setModelProperty(model, nameWithoutExtension, logoGroup)
-
-        logoList.push(scene.getObjectByName(nameWithoutExtension))
+        logoList.push(scene.getObjectByName(logoFileInfo.name))
     });
 
 })

@@ -7,12 +7,14 @@ import linkedinSrc from '../assets/linkedin.svg';
 </script>
 
 <template>
+    <div class="fixed bg-gradient-to-r from-orange-200 via-orange-200/0 w-screen h-screen my-0 -z-10">
 
-
-    <body class="flex justify-center content-center text-slate-900 text-center">
+    <!-- <body class="flex justify-center content-center text-slate-900 text-center"> -->
+        <body class="my-10 mx-10">
         <!-- outer container aspect-[210/297] -->
-        <div
-            class="z-10 bg-opacity-85 bg-white border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10 max-w-5xl">
+        <!-- <div
+            class="z-10 bg-opacity-85 bg-white border border-gray-300 rounded-sm shadow-lg py-10 px-10 w-4/5 mt-10 mb-10 max-w-5xl"> -->
+            <div>
             <!-- header (profile) -->
             <header>
                 <!-- social icons-->
@@ -93,8 +95,6 @@ import linkedinSrc from '../assets/linkedin.svg';
                     <ul class="mt-2 flex">
                         <Badge msg="Typescript"></Badge>
                         <Badge msg="Javascript"></Badge>
-                        <Badge msg="HTML"></Badge>
-                        <Badge msg="CSS"></Badge>
                     </ul>
                     <div class="border-b w-6 ml-28 my-2"></div>
                     <ul class="mt-2 flex">
@@ -167,7 +167,7 @@ import linkedinSrc from '../assets/linkedin.svg';
                     <h2 class="text-2xl font-semibold mb-2">Expériences professionnelles</h2>
                     <!-- work experiences -->
                     <section>
-                        <ul class="">
+                        <ul class="text-center">
                             <div>
                                 <p class="text-slate-400">Eviden</p>
                             </div>
@@ -178,7 +178,7 @@ import linkedinSrc from '../assets/linkedin.svg';
                     </section>
 
                     <section>
-                        <ul>
+                        <ul class="text-center">
                             <div>
                                 <p class="text-slate-400">Atos</p>
                             </div>
@@ -191,4 +191,5 @@ import linkedinSrc from '../assets/linkedin.svg';
             </main>
         </div>
     </body>
+</div>
 </template>

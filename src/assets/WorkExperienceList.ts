@@ -20,7 +20,7 @@ const workExperiences: WorkExperience[] = [
         "dateFromTo": "Fev. 2024 - Mai. 2024",
         "description": "Centralisateur et comparateur de KPI pour les différentes usines avec gestion d'éléments de conseils de performance.",
         "activities": [
-            "Développeur full stack avec NestJS",
+            "Développeur full stack avec NestJS et Next",
             "Tests unitaires et e2e",
             "Querying SQL avec TypeORM pour la partie BDD",
             "Qualité de code - Sonarqube"
@@ -32,7 +32,7 @@ const workExperiences: WorkExperience[] = [
         "dateFromTo": "Nov. 2022 - Fev. 2024",
         "description": "Outil de gestion interne à l'entreprise client, avec un modèle de données à remanier et de multiples contraintes.",
         "activities": [
-            "Développement de formulaires complexes avec sauvegarde automatique",
+            "Développement de formulaires dynamiques complexes avec sauvegarde automatique",
             "Travail dans une équipe à travers l'internationale",
             "Force de proposition auprès des UX/UI, DBA, Backend et testeur",
             "Qualité de code",
@@ -46,22 +46,22 @@ const workExperiences: WorkExperience[] = [
         "description": "Création d'un site web d'édition et de visualisation de contenu immersif 3D en interne chez Atos, et pour des clients finaux comme la SNCF, ou musées et magasins.",
         "activities": [
             "Développement d'une architecture dite futur-proof",
-            "Optimisation et conception de scène 3D dans un site web avec BabylonJS",
+            "Optimisation et conception de scène 3D dans un site web avec BabylonJS et React",
             "Support multi utilisateur et partage d'expérience immersive"
         ]
     },
     {// Ugap
         "company": "Ugap",
-        "title": "Consultant technique",
+        "title": "Développeur Front-end & Consultant technique",
         "dateFromTo": "Fev. 2021 - Oct. 2021",
-        "description": "Développement d'un site web contenant multiple formulaire et gestion de droit pour un acteur du secteur public",
+        "description": "Développement d'un site web contenant des formulaires avec une gestion de droit pour un acteur du secteur public",
         "activities": []
     },
     {// Koela
         "company": "",
         "title": "Développeur Full Stack",
         "dateFromTo": "Avr. 2019 - Fev. 2021",
-        "description": "Développement d'un outil interne de gestion interne d'emploi du temps et de coût.",
+        "description": "Développement d'un outil interne de gestion de ressources, d'emploi du temps et de coût.",
         "activities": [
             "Architecture from scratch",
             "Participation méthode Scrum (gestion des tâche et formation nouveaux arrivants)",
