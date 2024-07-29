@@ -9,8 +9,8 @@ export function useMouse() {
   const normY = ref(0)
 
   function update(event: any) {
-    x.value = event.clientX
-    y.value = event.clientY
+    x.value = event.pageX
+    y.value = event.pageY
     normX.value = (event.clientX / window.innerWidth) - 0.5
     normY.value = (event.clientY / window.innerHeight) - 0.5
   }

@@ -13,6 +13,7 @@ const workExperiences: WorkExperience[] = [
             "Utilisation de l'API Looker de Google",
             "Websocket avec Socket.io",
         ],
+        skills: ['NestJS', 'Looker', 'Socket.io'],
     },
     { // Sanofi
         "company": "Sanofi",
@@ -24,7 +25,8 @@ const workExperiences: WorkExperience[] = [
             "Tests unitaires et e2e",
             "Querying SQL avec TypeORM pour la partie BDD",
             "Qualité de code - Sonarqube"
-        ]
+        ],
+        skills: ['NestJS', 'Next', 'TypeORM', 'Sonarqube'],
     },
     {// Hub'l
         "company": "Renault",
@@ -37,7 +39,8 @@ const workExperiences: WorkExperience[] = [
             "Force de proposition auprès des UX/UI, DBA, Backend et testeur",
             "Qualité de code",
             "Test e2e (black box testing)"
-        ]
+        ],
+        skills: ['React', 'Typescript', 'Cypress'],
     },
     {// Advise
         "company": "SNCF",
@@ -48,17 +51,19 @@ const workExperiences: WorkExperience[] = [
             "Développement d'une architecture dite futur-proof",
             "Optimisation et conception de scène 3D dans un site web avec BabylonJS et React",
             "Support multi utilisateur et partage d'expérience immersive"
-        ]
+        ],
+        skills: ['React', 'BabylonJS', 'GCP', 'Typescript'],
     },
     {// Ugap
         "company": "Ugap",
         "title": "Développeur Front-end & Consultant technique",
         "dateFromTo": "Fev. 2021 - Oct. 2021",
         "description": "Développement d'un site web contenant des formulaires avec une gestion de droit pour un acteur du secteur public",
-        "activities": []
+        "activities": [],
+        skills: ['React', 'Typescript'],
     },
     {// Koela
-        "company": "",
+        "company": "Atos",
         "title": "Développeur Full Stack",
         "dateFromTo": "Avr. 2019 - Fev. 2021",
         "description": "Développement d'un outil interne de gestion de ressources, d'emploi du temps et de coût.",
@@ -68,7 +73,8 @@ const workExperiences: WorkExperience[] = [
             "Dockerisation du projet",
             "Import/export Excel",
             "Test e2e Front end avec Cypress"
-        ]
+        ],
+        skills: ['Angular', 'NodeJS', 'MongoDB', 'Cypress', 'docker'],
     }
 ];
 

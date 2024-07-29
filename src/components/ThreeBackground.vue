@@ -1,16 +1,32 @@
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
-import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels } from '../utils/utils.three';
+import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels, importGlb } from '../utils/utils.three';
 import { useScroll } from '../hooks/useScroll';
 import { LogoFileInfo, logoFileList, Steps } from '../utils/constant';
 import { useMouse } from '../hooks/useMouse';
+import gsap from 'gsap';
 
 
-const props = defineProps(['overed', 'step']);
+const props = defineProps(['overed', 'step', 'categories']);
 let needUpdate = true;
+let categoriesToTrigger: { name: string, needTrigger: boolean, needTriggerOut: boolean }[] = [];
 watch(() => props.step, () => {
     needUpdate = true;
+});
+watch(() => props.categories, () => {
+
+    const res = props.categories.map((cat: string) => ({ name: cat, needTrigger: false }));
+    categoriesToTrigger = [...categoriesToTrigger, ...res.filter((cat: { name: string; }) => !categoriesToTrigger.some((cat2) => cat2.name === cat.name))]
+
+
+    categoriesToTrigger.forEach((cat) => {
+        if (props.categories.includes(cat.name)) {
+            cat.needTrigger = true;
+        } else {
+            cat.needTriggerOut = true;
+        }
+    });
 });
 const { scrollMaxY } = useScroll();
 const { normX, normY } = useMouse()
@@ -53,18 +69,30 @@ scene.background = new THREE.Color(0xcceafc);
 
 
 // 3D Models loading
-
-const logoList: Array<THREE.Object3D | undefined> = []
+const logoList: {modelInstance?: THREE.Object3D, modelBackup?: any }[] = []
 const logoGroup = new THREE.Group();
 scene.add(logoGroup);
 
 logoFileList.forEach((logoFileInfo: LogoFileInfo) => {
-
-    importFbx(logoFileInfo.name).then((model: any) => {
-        setModelProperty(model, logoFileInfo, logoGroup)
-
-        logoList.push(scene.getObjectByName(logoFileInfo.name))
-    });
+    switch (logoFileInfo.name.slice(logoFileInfo.name.lastIndexOf('.') + 1)) {
+        case 'fbx':
+            importFbx(logoFileInfo.name).then((model: any) => {
+                // TODO : set name and size in the constant array
+                setModelProperty(model, logoFileInfo, logoGroup, 0.01)
+                logoList.push({modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf(".")))})
+            });
+            break;
+        case 'glb':
+            importGlb(logoFileInfo.name).then((model: any) => {
+                setModelProperty(model.scene, logoFileInfo, logoGroup, 0.3)
+                logoList.push({modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf(".")))})
+            });
+            break;
+        case 'gltf':
+            break;
+        default:
+            break;
+    }
 
 })
 
@@ -82,22 +110,34 @@ function animate() {
     dev3Dmd.position.set(getLinear(), 0, 0);
 
     // Step has changed
-    if(needUpdate) {
-        getOutModels(logoList)
+    if (needUpdate) {
+        getOutModels(logoList.map((logo) => logo.modelInstance));
         switch (props.step) {
             case Steps.PROFIL:
-                
+
                 break;
             case Steps.PROEXP:
-                setModelsInGrid(logoList, 3);
-                
-                logoGroup.position.set(-0.70, 0.70, 3);
+                setModelsInGrid(logoList.map((logo) => logo.modelInstance), 3);
+
+                logoGroup.position.set(-0.50, 0.70, 3);
+                logoList.forEach((logo) => {
+                    logo.modelBackup = {
+                        x: logo.modelInstance?.position.x,
+                        y: logo.modelInstance?.position.y,
+                        z: logo.modelInstance?.position.z,
+                        scale: {
+                            x: logo.modelInstance?.scale.x,
+                            y: logo.modelInstance?.scale.y,
+                            z: logo.modelInstance?.scale.z,
+                        }
+                    }
+                })
                 break;
             case Steps.TRAINING:
-                
+
                 break;
             case Steps.HOBBIES:
-                
+
                 break;
             default:
                 break;
@@ -105,7 +145,63 @@ function animate() {
         needUpdate = false;
     }
 
-    animateModels(logoList);
+    animateModels(logoList.map((logo) => logo.modelInstance));
+
+    // Categories animation with gsap, to trigger the animation only once
+    categoriesToTrigger.forEach((cat) => {
+
+        const logoInstanceAndBackup = logoList.find((logo) => logo.modelInstance?.name === cat.name);
+        const categoryToAnimate = logoInstanceAndBackup?.modelInstance;
+        if (categoryToAnimate) {
+            if (cat.needTrigger) {
+
+                cat.needTrigger = false;
+
+                const tl = gsap.timeline();
+                tl.to(categoryToAnimate.position, {
+                    duration: 1,
+                    ease: 'back.inOut',
+                    z: 0.2,
+                })
+                .to(categoryToAnimate.scale, {
+                    duration: 1,
+                    ease: 'back.inOut',
+                    x: logoInstanceAndBackup.modelBackup.scale.x * 1.2,
+                    y: logoInstanceAndBackup.modelBackup.scale.y * 1.2,
+                    z: logoInstanceAndBackup.modelBackup.scale.z * 1.2,
+                }, 0) // To happend on the same time as the previous animation
+                .to(categoryToAnimate.rotation, {
+                    duration: 0.4,
+                    ease: 'power3.out',
+                    x: Math.PI * 2, // on Y axis is impossible because animation already in progress
+                    onComplete: () => {
+                        categoryToAnimate.rotation.x = 0;
+                    }
+                })
+                
+            }
+            if(cat.needTriggerOut) {
+
+                cat.needTriggerOut = false;
+
+                // Animation out
+                const tl = gsap.timeline();
+                console.log('animation out ', categoryToAnimate.name)
+                tl.to(categoryToAnimate.position, {
+                    duration: 1,
+                    ease: 'power3.inOut',
+                    z: logoInstanceAndBackup?.modelBackup?.z ? logoInstanceAndBackup.modelBackup.z : 0,
+                })
+                .to(categoryToAnimate.scale, {
+                    duration: 1,
+                    ease: 'back.inOut',
+                    x: logoInstanceAndBackup.modelBackup.scale.x,
+                    y: logoInstanceAndBackup.modelBackup.scale.y,
+                    z: logoInstanceAndBackup.modelBackup.scale.z,
+                }, 0.5)
+            }
+        }
+    });
 
     // Background terrain animation
 

@@ -23,6 +23,7 @@ const currentView = computed(() => {
 
 const overed = ref('')
 const step = ref('')
+const categories = ref<string[]>([]);
 
 function setOvered(overedValue: string) {
     overed.value = overedValue;
@@ -32,15 +33,19 @@ function setStep(value: string) {
     step.value = value;
 }
 
+function setCategories(categoriesRes: string[]) {
+    categories.value = categoriesRes;
+}   
+
 </script>
 
 <template>
 
-    <ThreeBackground :overed="overed" :step="step"></ThreeBackground>
+    <ThreeBackground :overed="overed" :step="step" :categories="categories"></ThreeBackground>
 
-    <a href="#/single-page-cv" class="fixed">CV</a>
+    <!-- <a href="#/single-page-cv" class="fixed">CV</a> -->
 
-    <component :is="currentView" @over="setOvered" @scroll="setStep"/>
+    <component :is="currentView" @over="setOvered" @scroll="setStep" @categories="setCategories"/>
 
 
 

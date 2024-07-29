@@ -11,7 +11,7 @@ const proExp = ref<HTMLElement | null>(null);
 const training = ref<HTMLElement | null>(null);
 const hobbies = ref<HTMLElement | null>(null);
 
-const emit = defineEmits(['over', 'scroll']);
+const emit = defineEmits(['over', 'scroll', 'categories']);
 
 function overEvent(overedObject: string) {
     emit('over', overedObject)
@@ -64,10 +64,10 @@ function whatFocus() {
         <ul class="flex flex-col px-32 py-32">
 
             <li ref="profil" class="flex mb-32">
-                <ProfilSummary @over="overEvent" />
+                <ProfilSummary @over="overEvent"/>
             </li>
             <li ref="proExp" class="flex flex-row-reverse my-32">
-                <ProExp @over="overEvent" />
+                <ProExp @over="overEvent" @categories="$emit('categories', $event)"/>
             </li>
             <li ref="training" class="flex my-32">
                 <Training @over="overEvent" />

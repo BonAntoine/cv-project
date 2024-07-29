@@ -11,7 +11,7 @@ import {
     Object3D,
     MeshToonMaterial,
 } from "three";
-import { FBXLoader } from "three/examples/jsm/Addons.js";
+import { FBXLoader, GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { LogoFileInfo, logoFileList } from "./constant";
 
 function createTerrain(props: any) {
@@ -42,22 +42,26 @@ function createLight(color: string) {
 }
 
 const loader = new FBXLoader();
+const loaderGlb = new GLTFLoader();
 
 async function importFbx(modelName: string): Promise<Group<Object3DEventMap>> {
     return loader.loadAsync("cv-project/ressources/models/" + modelName);
+}
+async function importGlb(modelName: string): Promise<GLTF> {
+    return loaderGlb.loadAsync("cv-project/ressources/models/" + modelName);
 }
 
 function setModelProperty(
     model: Group<Object3DEventMap>,
     logoFileInfo: LogoFileInfo,
-    group: Group
+    group: Group,
+    scale: number
 ) {
-    model.name = logoFileInfo.name;
+    model.name = logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."));
     model.position.set(-100, -100, -100);
-    model.scale.set(0.01, 0.01, 0.01);
+    model.scale.set(scale, scale, scale);
     model.children.forEach((child) => {
         child.children.forEach((c) => {
-            console.log(c.name)
             logoFileInfo.texture.forEach((texture) => {
                     if (c.name === texture.meshName) {
                         (c as Mesh).material = texture.material;
@@ -88,7 +92,7 @@ function setModelsInGrid(
 }
 
 function getOutModels(models: Array<Object3D | undefined>) {
-    models.forEach((model, index) => {
+    models.forEach((model) => {
         if (model) {
             model.position.set(-100, -100, -100);
         }
@@ -96,10 +100,14 @@ function getOutModels(models: Array<Object3D | undefined>) {
 }
 
 function animateModels(models: Array<Object3D | undefined>) {
-    models.forEach((model, index) => {
+    models.forEach((model) => {
         if (model) {
-            const time = Date.now() * 0.001;
-            model.rotation.y += Math.sin(time) * 0.005;
+            const time = Date.now() * 0.001; // time in seconds
+            const oscillation = Math.sin(time); // oscillates between -1 and 1
+            // Define yRotation a value osciallating between -0.4 and 0.4 with the oscillation value + gap
+            const yRotation = oscillation * 0.4 + 0.2;
+            
+            model.rotation.y = yRotation;
         }
     });
 }
@@ -112,4 +120,5 @@ export {
     setModelsInGrid,
     getOutModels,
     animateModels,
+    importGlb,
 };

@@ -40,15 +40,8 @@ const logoFileList: LogoFileInfo[] = [
         ],
     },
     {
-        name: "docker.fbx",
+        name: "docker.glb",
         texture: [
-            {
-                meshName: "back",
-                material: new MeshStandardMaterial({
-                    color: 0x000000,
-                    roughness: 0,
-                }),
-            },
         ],
     },
     {
