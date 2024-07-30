@@ -2,7 +2,8 @@ import { MeshStandardMaterial } from "three";
 
 export interface LogoFileInfo {
     name: string;
-    texture: { meshName: string; material: MeshStandardMaterial }[];
+    texture?: { meshName: string; material: MeshStandardMaterial }[];
+    size?: number;
 }
 
 const logoFileList: LogoFileInfo[] = [
@@ -41,8 +42,7 @@ const logoFileList: LogoFileInfo[] = [
     },
     {
         name: "docker.glb",
-        texture: [
-        ],
+        size: 0.3
     },
     {
         name: "git.fbx",
@@ -258,6 +258,55 @@ const logoFileList: LogoFileInfo[] = [
                 meshName: "LOGO_1",
                 material: new MeshStandardMaterial({
                     color: 0x8feb74,
+                    roughness: 0,
+                }),
+            },
+        ],
+    },
+    {
+        name: "Angular.fbx",
+        texture: [
+            {
+                meshName: "back",
+                material: new MeshStandardMaterial({
+                    color: 0xffffff,
+                    roughness: 0,
+                }),
+            },
+            {
+                meshName: "LOGO",
+                material: new MeshStandardMaterial({
+                    color: 0xb41c30,
+                    roughness: 0,
+                }),
+            },
+        ],
+    },
+    // {
+    //     name: "Looker.glb",
+    //     size: 0.5
+    // },
+    {
+        name: "ThreeJS.fbx",
+        texture: [
+            {
+                meshName: "back",
+                material: new MeshStandardMaterial({
+                    color: 0xffffff,
+                    roughness: 0,
+                }),
+            },
+            {
+                meshName: "node_id29",
+                material: new MeshStandardMaterial({
+                    color: 0x000000,
+                    roughness: 0,
+                }),
+            },
+            {
+                meshName: "mesh_id37",
+                material: new MeshStandardMaterial({
+                    color: 0x000000,
                     roughness: 0,
                 }),
             },

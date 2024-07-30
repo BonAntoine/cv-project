@@ -6,6 +6,7 @@ import { useScroll } from '../hooks/useScroll';
 import { LogoFileInfo, logoFileList, Steps } from '../utils/constant';
 import { useMouse } from '../hooks/useMouse';
 import gsap from 'gsap';
+import { watchDebounced } from '@vueuse/core';
 
 
 const props = defineProps(['overed', 'step', 'categories']);
@@ -14,7 +15,10 @@ let categoriesToTrigger: { name: string, needTrigger: boolean, needTriggerOut: b
 watch(() => props.step, () => {
     needUpdate = true;
 });
-watch(() => props.categories, () => {
+
+// Need debounced, ideally with waiting a value of the time of the animation in
+// Because otherwise, the animation in and animation out would override each other
+watchDebounced(() => props.categories, () => {
 
     const res = props.categories.map((cat: string) => ({ name: cat, needTrigger: false }));
     categoriesToTrigger = [...categoriesToTrigger, ...res.filter((cat: { name: string; }) => !categoriesToTrigger.some((cat2) => cat2.name === cat.name))]
@@ -27,7 +31,7 @@ watch(() => props.categories, () => {
             cat.needTriggerOut = true;
         }
     });
-});
+}, { debounce: 500, maxWait: 1000 });
 const { scrollMaxY } = useScroll();
 const { normX, normY } = useMouse()
 
@@ -69,23 +73,23 @@ scene.background = new THREE.Color(0xcceafc);
 
 
 // 3D Models loading
-const logoList: {modelInstance?: THREE.Object3D, modelBackup?: any }[] = []
+const logoList: { modelInstance?: THREE.Object3D, modelBackup?: any }[] = []
 const logoGroup = new THREE.Group();
 scene.add(logoGroup);
 
-logoFileList.forEach((logoFileInfo: LogoFileInfo) => {
+logoFileList.forEach(async (logoFileInfo: LogoFileInfo) => {
     switch (logoFileInfo.name.slice(logoFileInfo.name.lastIndexOf('.') + 1)) {
         case 'fbx':
-            importFbx(logoFileInfo.name).then((model: any) => {
+            await importFbx(logoFileInfo.name).then((model: any) => {
                 // TODO : set name and size in the constant array
-                setModelProperty(model, logoFileInfo, logoGroup, 0.01)
-                logoList.push({modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf(".")))})
+                setModelProperty(model, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 0.01)
+                logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
             });
             break;
         case 'glb':
-            importGlb(logoFileInfo.name).then((model: any) => {
-                setModelProperty(model.scene, logoFileInfo, logoGroup, 0.3)
-                logoList.push({modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf(".")))})
+            await importGlb(logoFileInfo.name).then((model: any) => {
+                setModelProperty(model.scene, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 1)
+                logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
             });
             break;
         case 'gltf':
@@ -93,6 +97,7 @@ logoFileList.forEach((logoFileInfo: LogoFileInfo) => {
         default:
             break;
     }
+    setModelsInGrid(logoList.map((logo) => logo.modelInstance), 4);
 
 })
 
@@ -111,15 +116,28 @@ function animate() {
 
     // Step has changed
     if (needUpdate) {
-        getOutModels(logoList.map((logo) => logo.modelInstance));
+        gsap.to(logoGroup.position, {
+            duration: 1,
+            ease: 'power3.out',
+            x: -1,
+            y: -1,
+            z: -1,
+        })
         switch (props.step) {
             case Steps.PROFIL:
 
                 break;
             case Steps.PROEXP:
-                setModelsInGrid(logoList.map((logo) => logo.modelInstance), 3);
+                setModelsInGrid(logoList.map((logo) => logo.modelInstance), 4);
 
-                logoGroup.position.set(-0.50, 0.70, 3);
+                gsap.to(logoGroup.position, {
+                    duration: 1,
+                    ease: 'power3.out',
+                    x: -0.50,
+                    y: 0.60,
+                    z: 3,
+                })
+
                 logoList.forEach((logo) => {
                     logo.modelBackup = {
                         x: logo.modelInstance?.position.x,
@@ -145,6 +163,14 @@ function animate() {
         needUpdate = false;
     }
 
+    // CATEGORIES ANIMATION
+
+    // TODO Scrolling animation
+    // if(props.step === Steps.PROEXP) {
+    //     logoGroup.position.y = logoGroup.position.y + document.documentElement.scrollHeight * 0.00001
+    // }
+
+    // Standing animation
     animateModels(logoList.map((logo) => logo.modelInstance));
 
     // Categories animation with gsap, to trigger the animation only once
@@ -158,47 +184,47 @@ function animate() {
                 cat.needTrigger = false;
 
                 const tl = gsap.timeline();
+
                 tl.to(categoryToAnimate.position, {
                     duration: 1,
                     ease: 'back.inOut',
                     z: 0.2,
                 })
-                .to(categoryToAnimate.scale, {
-                    duration: 1,
-                    ease: 'back.inOut',
-                    x: logoInstanceAndBackup.modelBackup.scale.x * 1.2,
-                    y: logoInstanceAndBackup.modelBackup.scale.y * 1.2,
-                    z: logoInstanceAndBackup.modelBackup.scale.z * 1.2,
-                }, 0) // To happend on the same time as the previous animation
-                .to(categoryToAnimate.rotation, {
-                    duration: 0.4,
-                    ease: 'power3.out',
-                    x: Math.PI * 2, // on Y axis is impossible because animation already in progress
-                    onComplete: () => {
-                        categoryToAnimate.rotation.x = 0;
-                    }
-                })
-                
+                    .to(categoryToAnimate.scale, {
+                        duration: 1,
+                        ease: 'back.inOut',
+                        x: logoInstanceAndBackup.modelBackup.scale.x * 1.2,
+                        y: logoInstanceAndBackup.modelBackup.scale.y * 1.2,
+                        z: logoInstanceAndBackup.modelBackup.scale.z * 1.2,
+                    }, 0) // To happend on the same time as the previous animation
+                    .to(categoryToAnimate.rotation, {
+                        duration: 0.4,
+                        ease: 'power3.out',
+                        x: Math.PI * 2, // on Y axis is impossible because animation already in progress
+                        onComplete: () => {
+                            categoryToAnimate.rotation.x = 0;
+                        }
+                    })
+
             }
-            if(cat.needTriggerOut) {
+            if (cat.needTriggerOut) {
 
                 cat.needTriggerOut = false;
 
                 // Animation out
                 const tl = gsap.timeline();
-                console.log('animation out ', categoryToAnimate.name)
                 tl.to(categoryToAnimate.position, {
                     duration: 1,
                     ease: 'power3.inOut',
-                    z: logoInstanceAndBackup?.modelBackup?.z ? logoInstanceAndBackup.modelBackup.z : 0,
+                    z: logoInstanceAndBackup.modelBackup.z,
                 })
-                .to(categoryToAnimate.scale, {
-                    duration: 1,
-                    ease: 'back.inOut',
-                    x: logoInstanceAndBackup.modelBackup.scale.x,
-                    y: logoInstanceAndBackup.modelBackup.scale.y,
-                    z: logoInstanceAndBackup.modelBackup.scale.z,
-                }, 0.5)
+                    .to(categoryToAnimate.scale, {
+                        duration: 1,
+                        ease: 'back.inOut',
+                        x: logoInstanceAndBackup.modelBackup.scale.x,
+                        y: logoInstanceAndBackup.modelBackup.scale.y,
+                        z: logoInstanceAndBackup.modelBackup.scale.z,
+                    }, 0.5)
             }
         }
     });

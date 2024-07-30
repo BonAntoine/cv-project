@@ -13,7 +13,7 @@ const workExperiences: WorkExperience[] = [
             "Utilisation de l'API Looker de Google",
             "Websocket avec Socket.io",
         ],
-        skills: ['NestJS', 'Looker', 'Socket.io'],
+        skills: ['NestJS', 'Looker', 'Socket.io', 'ThreeJS'],
     },
     { // Sanofi
         "company": "Sanofi",

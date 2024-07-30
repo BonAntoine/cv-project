@@ -58,11 +58,13 @@ function setModelProperty(
     scale: number
 ) {
     model.name = logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."));
-    model.position.set(-100, -100, -100);
+    console.log("For : ", model.name);
+    model.position.set(-1, -1, -1);
     model.scale.set(scale, scale, scale);
     model.children.forEach((child) => {
         child.children.forEach((c) => {
-            logoFileInfo.texture.forEach((texture) => {
+            console.log(c.name)
+            logoFileInfo.texture?.forEach((texture) => {
                     if (c.name === texture.meshName) {
                         (c as Mesh).material = texture.material;
                     }
