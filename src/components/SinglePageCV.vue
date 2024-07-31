@@ -43,7 +43,7 @@ import linkedinSrc from '../assets/linkedin.svg';
                     <div class="grid justify-items-end">
                         <h1 class="text-7xl font-extrabold">Antoine Bon</h1>
                         <p class="text-xl mt-5">Développeur Full Stack</p>
-                        <p class="text-slate-400">5 ans d'experiences</p>
+                        <p class="text-slate-400">5 ans d'experience</p>
                     </div>
                 </div>
             </header>
