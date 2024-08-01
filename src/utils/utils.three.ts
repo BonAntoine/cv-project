@@ -43,7 +43,6 @@ const loader = new FBXLoader();
 const loaderGlb = new GLTFLoader();
 
 async function importFbx(modelName: string): Promise<Group<Object3DEventMap>> {
-    console.log(import.meta.env.DEV);
     return loader.loadAsync(import.meta.env.DEV ? "cv-project/" : "" + "ressources/models/" + modelName);
 }
 async function importGlb(modelName: string): Promise<GLTF> {
