@@ -5,14 +5,12 @@ import {
     TextureLoader,
     DirectionalLight,
     DirectionalLightHelper,
-    Scene,
     Object3DEventMap,
     Group,
     Object3D,
-    MeshToonMaterial,
 } from "three";
 import { FBXLoader, GLTF, GLTFLoader } from "three/examples/jsm/Addons.js";
-import { LogoFileInfo, logoFileList } from "./constant";
+import { LogoFileInfo } from "./constant";
 
 function createTerrain(props: any) {
     const loader = new TextureLoader();
