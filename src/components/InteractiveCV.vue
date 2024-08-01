@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
 
 function whatFocus() {
 
-    const profilScrollValue = profil.value?.scrollHeight as number;
+    const profilScrollValue = profil.value?.scrollHeight as number * 0.70; // Because 110vh
     const proExpScrollValue = proExp.value?.scrollHeight as number + profilScrollValue;
     const trainingScrollValue = training.value?.scrollHeight as number + proExpScrollValue;
     const hobbiesScrollValue = hobbies.value?.scrollHeight as number + trainingScrollValue;

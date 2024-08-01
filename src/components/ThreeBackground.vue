@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
-import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, getOutModels, animateModels, importGlb } from '../utils/utils.three';
+import { createTerrain, createLight, importFbx, setModelProperty, setModelsInGrid, animateModels, importGlb } from '../utils/utils.three';
 import { useScroll } from '../hooks/useScroll';
 import { LogoFileInfo, logoFileList, Steps } from '../utils/constant';
 import { useMouse } from '../hooks/useMouse';
@@ -10,6 +10,8 @@ import { watchDebounced } from '@vueuse/core';
 
 
 const props = defineProps(['overed', 'step', 'categories']);
+const emit = defineEmits(['finishLoading']);
+
 let needUpdate = true;
 let categoriesToTrigger: { name: string, needTrigger: boolean, needTriggerOut: boolean }[] = [];
 watch(() => props.step, () => {
@@ -76,31 +78,35 @@ scene.background = new THREE.Color(0xcceafc);
 const logoList: { modelInstance?: THREE.Object3D, modelBackup?: any }[] = []
 const logoGroup = new THREE.Group();
 scene.add(logoGroup);
+let importPromises: (() => Promise<void> | undefined)[] = []
 
-logoFileList.forEach(async (logoFileInfo: LogoFileInfo) => {
-    switch (logoFileInfo.name.slice(logoFileInfo.name.lastIndexOf('.') + 1)) {
-        case 'fbx':
-            await importFbx(logoFileInfo.name).then((model: any) => {
-                // TODO : set name and size in the constant array
-                setModelProperty(model, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 0.01)
-                logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
-            });
-            break;
-        case 'glb':
-            await importGlb(logoFileInfo.name).then((model: any) => {
-                setModelProperty(model.scene, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 1)
-                logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
-            });
-            break;
-        case 'gltf':
-            break;
-        default:
-            break;
-    }
-    setModelsInGrid(logoList.map((logo) => logo.modelInstance), 4);
-
+logoFileList.forEach((logoFileInfo: LogoFileInfo) => {
+    importPromises.push(() => {
+        switch (logoFileInfo.name.slice(logoFileInfo.name.lastIndexOf('.') + 1)) {
+            case 'fbx':
+                return importFbx(logoFileInfo.name).then((model: any) => {
+                    // TODO : set name and size in the constant array
+                    setModelProperty(model, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 0.01)
+                    logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
+                });
+            case 'glb':
+                return importGlb(logoFileInfo.name).then((model: any) => {
+                    setModelProperty(model.scene, logoFileInfo, logoGroup, logoFileInfo.size ? logoFileInfo.size : 1)
+                    logoList.push({ modelInstance: scene.getObjectByName(logoFileInfo.name.slice(0, logoFileInfo.name.lastIndexOf("."))) })
+                });
+            case 'gltf':
+                break;
+            default:
+                break;
+        }
+    })
+    
 })
 
+Promise.all(importPromises.map((promise) => promise())).then(() => {
+    setModelsInGrid(logoList.map((logo) => logo.modelInstance), 4);
+    emit('finishLoading');
+})
 
 
 scene.add(terrain, light);
