@@ -14,7 +14,7 @@ import { LogoFileInfo } from "./constant";
 
 function createTerrain(props: any) {
     const loader = new TextureLoader();
-    const height = loader.load("cv-project/ressources/height.png");
+    const height = loader.load(import.meta.env.DEV ? "cv-project/" : "" + "ressources/height.png");
 
     const geometry = new PlaneGeometry(150, 150, 64, 64);
 
@@ -43,10 +43,11 @@ const loader = new FBXLoader();
 const loaderGlb = new GLTFLoader();
 
 async function importFbx(modelName: string): Promise<Group<Object3DEventMap>> {
-    return loader.loadAsync("cv-project/ressources/models/" + modelName);
+    console.log(import.meta.env.DEV);
+    return loader.loadAsync(import.meta.env.DEV ? "cv-project/" : "" + "ressources/models/" + modelName);
 }
 async function importGlb(modelName: string): Promise<GLTF> {
-    return loaderGlb.loadAsync("cv-project/ressources/models/" + modelName);
+    return loaderGlb.loadAsync(import.meta.env.DEV ? "cv-project/" : "" + "ressources/models/" + modelName);
 }
 
 function setModelProperty(
